@@ -1,5 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Label from "../Label/Label";
+import { graphql } from "relay-runtime";
+import { useMutation } from "react-relay";
 
 type FormErrors = {
   username?: string;
@@ -8,6 +10,26 @@ type FormErrors = {
   password_confirmation?: string;
 };
 
+const SignUpFormMutation = graphql`
+  mutation SignUpFormMutation(
+    $username: String!
+    $email: String!
+    $password: String!
+    $passwordConfirmation: String!
+  ) {
+    signup(
+      input: {
+        username: $username
+        email: $email
+        password: $password
+        passwordConfirmation: $passwordConfirmation
+      }
+    ) {
+      errors
+    }
+  }
+`;
+
 export default function SignUpForm() {
   const initialValues = {
     username: "",
@@ -15,6 +37,7 @@ export default function SignUpForm() {
     password: "",
     password_confirmation: "",
   };
+  const [commitMutation, isMutationInFlight] = useMutation(SignUpFormMutation);
   return (
     <Formik
       initialValues={initialValues}
@@ -46,11 +69,15 @@ export default function SignUpForm() {
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-
-          setSubmitting(false);
-        }, 400);
+        commitMutation({
+          variables: {
+            username: values.username,
+            email: values.email,
+            password: values.password,
+            passwordConfirmation: values.password_confirmation,
+          },
+        });
+        setSubmitting(false);
       }}
     >
       {({ isSubmitting }) => (

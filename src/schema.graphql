@@ -2,3 +2,18 @@
 type Query {
   field: String
 }
+
+input SignupInput {
+  username: String!
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type SignupResponse {
+  errors: [String!]!
+}
+
+type Mutation {
+  signup(input: SignupInput!): SignupResponse!
+}
