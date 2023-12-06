@@ -3,15 +3,11 @@ import { RelayEnvironment } from "./RelayEnvironment";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
 import SignUp from "./page/SignUp";
 import SignIn from "./page/SignIn";
+import "../src/index.css";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
   {
     path: "/users/sign_in",
     element: <SignIn />,
