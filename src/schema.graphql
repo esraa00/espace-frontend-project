@@ -1,4 +1,3 @@
-# Replace this with your own GraphQL schema file!
 type Query {
   field: String
 }
@@ -14,6 +13,16 @@ type SignupResponse {
   errors: [String!]!
 }
 
+input SignInInput {
+  usernameOrEmail: String!
+  password: String!
+}
+
+type SignInResponse {
+  errors: [String!]!
+}
+
 type Mutation {
   signup(input: SignupInput!): SignupResponse!
+  signin(input: SignInInput!): SignInResponse!
 }
