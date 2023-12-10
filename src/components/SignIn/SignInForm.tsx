@@ -12,6 +12,7 @@ const SignInFormMutation = graphql`
   mutation SignInFormMutation($usernameOrEmail: String!, $password: String!) {
     signin(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
       errors
+      bearerToken
     }
   }
 `;
@@ -44,13 +45,15 @@ export default function SignInForm() {
             password: values.password,
           },
           onCompleted(response, errors) {
-            console.log(
-              "Response headers:",
-              response?.extensions?.response?.headers
-            );
+            if (response.signin.errors.length == 0) {
+              localStorage.setItem(
+                "Authorization",
+                response.signin.bearerToken
+              );
+            }
           },
-        });
-        setSubmitting(false);
+        }),
+          setSubmitting(false);
       }}
     >
       {({ isSubmitting }) => (
