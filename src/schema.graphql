@@ -1,0 +1,29 @@
+type Query {
+  field: String
+}
+
+input SignupInput {
+  username: String!
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type SignupResponse {
+  errors: [String!]!
+}
+
+input SignInInput {
+  usernameOrEmail: String!
+  password: String!
+}
+
+type SignInResponse {
+  errors: [String!]!
+  bearerToken: String
+}
+
+type Mutation {
+  signup(input: SignupInput!): SignupResponse!
+  signin(input: SignInInput!): SignInResponse!
+}
