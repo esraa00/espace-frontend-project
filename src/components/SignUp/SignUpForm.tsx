@@ -4,6 +4,7 @@ import { graphql } from "relay-runtime";
 import { useMutation } from "react-relay";
 
 type FormErrors = {
+  displayName?: string;
   username?: string;
   email?: string;
   password?: string;
@@ -12,6 +13,7 @@ type FormErrors = {
 
 const SignUpFormMutation = graphql`
   mutation SignUpFormMutation(
+    $displayName: String!
     $username: String!
     $email: String!
     $password: String!
@@ -19,6 +21,7 @@ const SignUpFormMutation = graphql`
   ) {
     signup(
       input: {
+        displayName: $displayName
         username: $username
         email: $email
         password: $password
@@ -32,6 +35,7 @@ const SignUpFormMutation = graphql`
 
 export default function SignUpForm() {
   const initialValues = {
+    displayName: "",
     username: "",
     email: "",
     password: "",
@@ -39,70 +43,105 @@ export default function SignUpForm() {
   };
   const [commitMutation, isMutationInFlight] = useMutation(SignUpFormMutation);
   return (
-    <Formik
-      initialValues={initialValues}
-      validate={(values) => {
-        const errors: FormErrors = {};
+    <div className="page-wrapper">
+      <Formik
+        initialValues={initialValues}
+        validate={(values) => {
+          const errors: FormErrors = {};
 
-        if (!values.email) {
-          errors.email = "Required";
-        } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-        ) {
-          errors.email = "Invalid email address";
-        }
+          if (!values.displayName) {
+            errors.displayName = "Required";
+          }
 
-        if (!values.username) {
-          errors.username = "Required";
-        }
+          if (!values.email) {
+            errors.email = "Required";
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+          ) {
+            errors.email = "Invalid email address";
+          }
 
-        if (!values.password) {
-          errors.password = "Required";
-        }
+          if (!values.username) {
+            errors.username = "Required";
+          }
 
-        if (
-          values.password != values.password_confirmation ||
-          !values.password
-        ) {
-          errors.password_confirmation = "Doesn't match Password";
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        commitMutation({
-          variables: {
-            username: values.username,
-            email: values.email,
-            password: values.password,
-            passwordConfirmation: values.password_confirmation,
-          },
-        });
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Label label="username" />
-          <Field type="text" name="username" />
-          <ErrorMessage name="username" component="div" />
+          if (!values.password) {
+            errors.password = "Required";
+          }
 
-          <Label label="email" />
-          <Field type="email" name="email" />
-          <ErrorMessage name="email" component="div" />
+          if (
+            values.password != values.password_confirmation ||
+            !values.password
+          ) {
+            errors.password_confirmation = "Doesn't match Password";
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          commitMutation({
+            variables: {
+              displayName: values.displayName,
+              username: values.username,
+              email: values.email,
+              password: values.password,
+              passwordConfirmation: values.password_confirmation,
+            },
+          });
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="form">
+            <Label label="displayName" />
+            <Field type="text" name="displayName" className="field" />
+            <ErrorMessage
+              name="displayName"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="password" />
-          <Field type="password" name="password" />
-          <ErrorMessage name="password" component="div" />
+            <Label label="username" />
+            <Field type="text" name="username" className="field" />
+            <ErrorMessage
+              name="username"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="confirm password" />
-          <Field type="password" name="password_confirmation" />
-          <ErrorMessage name="password_confirmation" component="div" />
+            <Label label="email" />
+            <Field type="email" name="email" className="field" />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="error-message"
+            />
 
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+            <Label label="password" />
+            <Field type="password" name="password" className="field" />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="error-message"
+            />
+
+            <Label label="confirm password" />
+            <Field
+              type="password"
+              name="password_confirmation"
+              className="field"
+            />
+            <ErrorMessage
+              name="password_confirmation"
+              component="div"
+              className="error-message"
+            />
+
+            <button type="submit" disabled={isSubmitting} className="mt-5">
+              Submit
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 }

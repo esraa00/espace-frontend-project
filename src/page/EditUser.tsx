@@ -1,4 +1,4 @@
-import Formik, { ErrorMessage, Field, Form } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { graphql, useMutation } from "react-relay";
 import Label from "../components/Label/Label";
 
@@ -13,21 +13,21 @@ type FormErrors = {
 
 const EditUserMutation = graphql`
   mutation EditUserMutation(
-    $display_name: String!
+    $displayName: String!
     $username: String!
     $email: String!
-    $current_password: String
-    $new_password: String
-    $new_password_confirmation: String
+    $currentPassword: String
+    $newPassword: String
+    $newPasswordConfirmation: String
   ) {
-    edit_user(
+    editUser(
       input: {
-        display_name: $display_name
+        displayName: $displayName
         username: $username
         email: $email
-        current_password: $current_password
-        new_password: $new_password
-        new_password_confirmation: $new_password_confirmation
+        currentPassword: $currentPassword
+        newPassword: $newPassword
+        newPasswordConfirmation: $newPasswordConfirmation
       }
     ) {
       errors
@@ -45,78 +45,117 @@ export default function EditUser() {
     newPasswordConfirmation: "",
   };
 
-  // const [commitMutation, isMutationInFlight] = useMutation(EditUserMutation);
+  const [commitMutation, isMutationInFlight] = useMutation(EditUserMutation);
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validate={(values) => {
-        const errors: FormErrors = {};
+    <div className="page-wrapper">
+      <Formik
+        initialValues={initialValues}
+        validate={(values) => {
+          const errors: FormErrors = {};
 
-        if (!values.displayName) {
-          errors.displayName = "Required";
-        }
+          if (!values.displayName) {
+            errors.displayName = "Required";
+          }
 
-        if (!values.email) {
-          errors.email = "Required";
-        } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-        ) {
-          errors.email = "Invalid email address";
-        }
+          if (!values.email) {
+            errors.email = "Required";
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+          ) {
+            errors.email = "Invalid email address";
+          }
 
-        if (!values.username) {
-          errors.username = "Required";
-        }
+          if (!values.username) {
+            errors.username = "Required";
+          }
 
-        if (values.currentPassword && !values.newPassword) {
-          errors.newPassword = "Required if current password exists";
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        // commitMutation({
-        //   variables: {
-        //     username: values.username,
-        //     email: values.email,
-        //     password: values.password,
-        //     passwordConfirmation: values.password_confirmation,
-        //   },
-        // });
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Label label="display name" />
-          <Field type="text" name="displayName" />
-          <ErrorMessage name="displayName" component="div" />
+          if (values.currentPassword && !values.newPassword) {
+            errors.newPassword = "Required if current password exists";
+          }
 
-          <Label label="username" />
-          <Field type="text" name="username" />
-          <ErrorMessage name="username" component="div" />
+          if (
+            (values.newPassword && !values.newPasswordConfirmation) ||
+            values.newPassword != values.newPasswordConfirmation
+          ) {
+            errors.newPasswordConfirmation = "doesn't match new password!";
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          commitMutation({
+            variables: {
+              displayName: values.displayName,
+              username: values.username,
+              email: values.email,
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword,
+              newPasswordConfirmation: values.newPasswordConfirmation,
+            },
+          });
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="form">
+            <Label label="display name" />
+            <Field type="text" name="displayName" className="field" />
+            <ErrorMessage
+              name="displayName"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="email" />
-          <Field type="email" name="email" />
-          <ErrorMessage name="email" component="div" />
+            <Label label="username" />
+            <Field type="text" name="username" className="field" />
+            <ErrorMessage
+              name="username"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="current password" />
-          <Field type="password" name="currentPassword" />
-          <ErrorMessage name="currentPassword" component="div" />
+            <Label label="email" />
+            <Field type="email" name="email" className="field" />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="new password" />
-          <Field type="password" name="newPassword" />
-          <ErrorMessage name="newPassword" component="div" />
+            <Label label="current password" />
+            <Field type="password" name="currentPassword" className="field" />
+            <ErrorMessage
+              name="currentPassword"
+              component="div"
+              className="error-message"
+            />
 
-          <Label label="confirm new password" />
-          <Field type="password" name="newPasswordConfirmation" />
-          <ErrorMessage name="newPasswordConfirmation" component="div" />
+            <Label label="new password" />
+            <Field type="password" name="newPassword" className="field" />
+            <ErrorMessage
+              name="newPassword"
+              component="div"
+              className="error-message"
+            />
 
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+            <Label label="confirm new password" />
+            <Field
+              type="password"
+              name="newPasswordConfirmation"
+              className="field"
+            />
+            <ErrorMessage
+              name="newPasswordConfirmation"
+              component="div"
+              className="error-message"
+            />
+
+            <button type="submit" disabled={isSubmitting} className="mt-5">
+              Submit
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 }

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .label {
+    @apply font-bold;
+  }
+  .field {
+    @apply outline;
+  }
+  .page-wrapper {
+    @apply flex justify-center items-center h-[100vh];
+  }
+  .form {
+    @apply flex flex-col w-fit justify-center items-center m-4 outline p-4;
+  }
+  .error-message {
+    @apply text-red-600 mt-2;
+  }
+}
