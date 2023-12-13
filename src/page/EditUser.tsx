@@ -1,31 +1,33 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import Label from "../Label/Label";
-import { graphql } from "relay-runtime";
-import { useMutation } from "react-relay";
+import { graphql, useMutation } from "react-relay";
+import Label from "../components/Label/Label";
 
 type FormErrors = {
   displayName?: string;
   username?: string;
   email?: string;
-  password?: string;
-  password_confirmation?: string;
+  currentPassword?: string;
+  newPassword?: string;
+  newPasswordConfirmation?: string;
 };
 
-const SignUpFormMutation = graphql`
-  mutation SignUpFormMutation(
+const EditUserMutation = graphql`
+  mutation EditUserMutation(
     $displayName: String!
     $username: String!
     $email: String!
-    $password: String!
-    $passwordConfirmation: String!
+    $currentPassword: String
+    $newPassword: String
+    $newPasswordConfirmation: String
   ) {
-    signup(
+    editUser(
       input: {
         displayName: $displayName
         username: $username
         email: $email
-        password: $password
-        passwordConfirmation: $passwordConfirmation
+        currentPassword: $currentPassword
+        newPassword: $newPassword
+        newPasswordConfirmation: $newPasswordConfirmation
       }
     ) {
       errors
@@ -33,15 +35,18 @@ const SignUpFormMutation = graphql`
   }
 `;
 
-export default function SignUpForm() {
+export default function EditUser() {
   const initialValues = {
     displayName: "",
     username: "",
     email: "",
-    password: "",
-    password_confirmation: "",
+    currentPassword: "",
+    newPassword: "",
+    newPasswordConfirmation: "",
   };
-  const [commitMutation, isMutationInFlight] = useMutation(SignUpFormMutation);
+
+  const [commitMutation, isMutationInFlight] = useMutation(EditUserMutation);
+
   return (
     <div className="page-wrapper">
       <Formik
@@ -65,15 +70,15 @@ export default function SignUpForm() {
             errors.username = "Required";
           }
 
-          if (!values.password) {
-            errors.password = "Required";
+          if (values.currentPassword && !values.newPassword) {
+            errors.newPassword = "Required if current password exists";
           }
 
           if (
-            values.password != values.password_confirmation ||
-            !values.password
+            (values.newPassword && !values.newPasswordConfirmation) ||
+            values.newPassword != values.newPasswordConfirmation
           ) {
-            errors.password_confirmation = "Doesn't match Password";
+            errors.newPasswordConfirmation = "doesn't match new password!";
           }
           return errors;
         }}
@@ -83,8 +88,9 @@ export default function SignUpForm() {
               displayName: values.displayName,
               username: values.username,
               email: values.email,
-              password: values.password,
-              passwordConfirmation: values.password_confirmation,
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword,
+              newPasswordConfirmation: values.newPasswordConfirmation,
             },
           });
           setSubmitting(false);
@@ -92,7 +98,7 @@ export default function SignUpForm() {
       >
         {({ isSubmitting }) => (
           <Form className="form">
-            <Label label="displayName" />
+            <Label label="display name" />
             <Field type="text" name="displayName" className="field" />
             <ErrorMessage
               name="displayName"
@@ -116,22 +122,30 @@ export default function SignUpForm() {
               className="error-message"
             />
 
-            <Label label="password" />
-            <Field type="password" name="password" className="field" />
+            <Label label="current password" />
+            <Field type="password" name="currentPassword" className="field" />
             <ErrorMessage
-              name="password"
+              name="currentPassword"
               component="div"
               className="error-message"
             />
 
-            <Label label="confirm password" />
+            <Label label="new password" />
+            <Field type="password" name="newPassword" className="field" />
+            <ErrorMessage
+              name="newPassword"
+              component="div"
+              className="error-message"
+            />
+
+            <Label label="confirm new password" />
             <Field
               type="password"
-              name="password_confirmation"
+              name="newPasswordConfirmation"
               className="field"
             />
             <ErrorMessage
-              name="password_confirmation"
+              name="newPasswordConfirmation"
               component="div"
               className="error-message"
             />

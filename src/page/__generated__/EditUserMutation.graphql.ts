@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<82e7012dd62d7f67d5614b2e691ef0fe>>
+ * @generated SignedSource<<450d920b8b837d30ca822f1ae96415cb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,55 +9,66 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type SignUpFormMutation$variables = {
+export type EditUserMutation$variables = {
+  currentPassword?: string | null | undefined;
   displayName: string;
   email: string;
-  password: string;
-  passwordConfirmation: string;
+  newPassword?: string | null | undefined;
+  newPasswordConfirmation?: string | null | undefined;
   username: string;
 };
-export type SignUpFormMutation$data = {
-  readonly signup: {
+export type EditUserMutation$data = {
+  readonly editUser: {
     readonly errors: ReadonlyArray<string>;
   };
 };
-export type SignUpFormMutation = {
-  response: SignUpFormMutation$data;
-  variables: SignUpFormMutation$variables;
+export type EditUserMutation = {
+  response: EditUserMutation$data;
+  variables: EditUserMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "displayName"
+  "name": "currentPassword"
 },
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "email"
+  "name": "displayName"
 },
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "password"
+  "name": "email"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "passwordConfirmation"
+  "name": "newPassword"
 },
 v4 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "newPasswordConfirmation"
+},
+v5 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "username"
 },
-v5 = [
+v6 = [
   {
     "alias": null,
     "args": [
       {
         "fields": [
+          {
+            "kind": "Variable",
+            "name": "currentPassword",
+            "variableName": "currentPassword"
+          },
           {
             "kind": "Variable",
             "name": "displayName",
@@ -70,13 +81,13 @@ v5 = [
           },
           {
             "kind": "Variable",
-            "name": "password",
-            "variableName": "password"
+            "name": "newPassword",
+            "variableName": "newPassword"
           },
           {
             "kind": "Variable",
-            "name": "passwordConfirmation",
-            "variableName": "passwordConfirmation"
+            "name": "newPasswordConfirmation",
+            "variableName": "newPasswordConfirmation"
           },
           {
             "kind": "Variable",
@@ -88,9 +99,9 @@ v5 = [
         "name": "input"
       }
     ],
-    "concreteType": "SignupResponse",
+    "concreteType": "EditUserResponse",
     "kind": "LinkedField",
-    "name": "signup",
+    "name": "editUser",
     "plural": false,
     "selections": [
       {
@@ -111,39 +122,41 @@ return {
       (v1/*: any*/),
       (v2/*: any*/),
       (v3/*: any*/),
-      (v4/*: any*/)
+      (v4/*: any*/),
+      (v5/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SignUpFormMutation",
-    "selections": (v5/*: any*/),
+    "name": "EditUserMutation",
+    "selections": (v6/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v0/*: any*/),
-      (v4/*: any*/),
       (v1/*: any*/),
+      (v5/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/)
+      (v0/*: any*/),
+      (v3/*: any*/),
+      (v4/*: any*/)
     ],
     "kind": "Operation",
-    "name": "SignUpFormMutation",
-    "selections": (v5/*: any*/)
+    "name": "EditUserMutation",
+    "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "2ca7054ceb22cf505804c03a918fbbe3",
+    "cacheID": "f7db8a28ca8774aa3ba10537d4966401",
     "id": null,
     "metadata": {},
-    "name": "SignUpFormMutation",
+    "name": "EditUserMutation",
     "operationKind": "mutation",
-    "text": "mutation SignUpFormMutation(\n  $displayName: String!\n  $username: String!\n  $email: String!\n  $password: String!\n  $passwordConfirmation: String!\n) {\n  signup(input: {displayName: $displayName, username: $username, email: $email, password: $password, passwordConfirmation: $passwordConfirmation}) {\n    errors\n  }\n}\n"
+    "text": "mutation EditUserMutation(\n  $displayName: String!\n  $username: String!\n  $email: String!\n  $currentPassword: String\n  $newPassword: String\n  $newPasswordConfirmation: String\n) {\n  editUser(input: {displayName: $displayName, username: $username, email: $email, currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation}) {\n    errors\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3c83f0e3a7076ba51bc6431ccd2e523b";
+(node as any).hash = "b21defc20459e99810af7a1a0f8f5e94";
 
 export default node;

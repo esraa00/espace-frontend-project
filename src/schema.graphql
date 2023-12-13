@@ -3,6 +3,7 @@ type Query {
 }
 
 input SignupInput {
+  displayName: String!
   username: String!
   email: String!
   password: String!
@@ -20,10 +21,23 @@ input SignInInput {
 
 type SignInResponse {
   errors: [String!]!
-  bearerToken: String
+}
+
+input EditUserInput {
+  displayName: String!
+  username: String!
+  email: String!
+  currentPassword: String
+  newPassword: String
+  newPasswordConfirmation: String
+}
+
+type EditUserResponse {
+  errors: [String!]!
 }
 
 type Mutation {
   signup(input: SignupInput!): SignupResponse!
   signin(input: SignInInput!): SignInResponse!
+  editUser(input: EditUserInput!): EditUserResponse!
 }
