@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { graphql, useMutation } from "react-relay";
 import Label from "../components/Label/Label";
+import { useParams } from "react-router-dom";
 
 type FormErrors = {
   displayName?: string;
@@ -13,6 +14,7 @@ type FormErrors = {
 
 const EditUserMutation = graphql`
   mutation EditUserMutation(
+    $id: String!
     $displayName: String!
     $username: String!
     $email: String!
@@ -22,6 +24,7 @@ const EditUserMutation = graphql`
   ) {
     editUser(
       input: {
+        id: $id
         displayName: $displayName
         username: $username
         email: $email
@@ -36,6 +39,7 @@ const EditUserMutation = graphql`
 `;
 
 export default function EditUser() {
+  const { id } = useParams();
   const initialValues = {
     displayName: "",
     username: "",
@@ -85,6 +89,7 @@ export default function EditUser() {
         onSubmit={(values, { setSubmitting }) => {
           commitMutation({
             variables: {
+              id,
               displayName: values.displayName,
               username: values.username,
               email: values.email,

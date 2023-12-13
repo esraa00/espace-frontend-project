@@ -17,7 +17,7 @@ const fetchFn: FetchFunction = async (request, variables) => {
         "application/graphql-response+json; charset=utf-8, application/json; charset=utf-8",
       "Content-Type": "application/json",
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Iiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNzAyNDI1NTQzLCJleHAiOjE3MDI0MjkxNDMsImp0aSI6IjliOWViNjNkLTc0YzgtNGJlOC04ZjViLWUzMTEzNjAzY2UxYyJ9.QV-gkE0w_c1a9Kk9Nt2Yega6r6agNEQtQ65BdhmvE10",
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNzAyNDkzMjc5LCJleHAiOjE3MDI0OTY4NzksImp0aSI6IjMwNzM5ODA4LTg4MTgtNGFlMS1iY2RhLTNmOTRhYzJjNjEwNiJ9.f2Bh9ZtFxq3GEeZVunYcR7OHwxZhzd8IA-Zitr-IOwU",
     },
     body: JSON.stringify({
       query: request.text, // <-- The GraphQL document composed by Relay

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<450d920b8b837d30ca822f1ae96415cb>>
+ * @generated SignedSource<<2f9cbceb94f13f52f1c88f8f934d615c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ export type EditUserMutation$variables = {
   currentPassword?: string | null | undefined;
   displayName: string;
   email: string;
+  id: string;
   newPassword?: string | null | undefined;
   newPasswordConfirmation?: string | null | undefined;
   username: string;
@@ -46,19 +47,24 @@ v2 = {
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "newPassword"
+  "name": "id"
 },
 v4 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "newPasswordConfirmation"
+  "name": "newPassword"
 },
 v5 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "newPasswordConfirmation"
+},
+v6 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "username"
 },
-v6 = [
+v7 = [
   {
     "alias": null,
     "args": [
@@ -78,6 +84,11 @@ v6 = [
             "kind": "Variable",
             "name": "email",
             "variableName": "email"
+          },
+          {
+            "kind": "Variable",
+            "name": "id",
+            "variableName": "id"
           },
           {
             "kind": "Variable",
@@ -123,40 +134,42 @@ return {
       (v2/*: any*/),
       (v3/*: any*/),
       (v4/*: any*/),
-      (v5/*: any*/)
+      (v5/*: any*/),
+      (v6/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
     "name": "EditUserMutation",
-    "selections": (v6/*: any*/),
+    "selections": (v7/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
+      (v3/*: any*/),
       (v1/*: any*/),
-      (v5/*: any*/),
+      (v6/*: any*/),
       (v2/*: any*/),
       (v0/*: any*/),
-      (v3/*: any*/),
-      (v4/*: any*/)
+      (v4/*: any*/),
+      (v5/*: any*/)
     ],
     "kind": "Operation",
     "name": "EditUserMutation",
-    "selections": (v6/*: any*/)
+    "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "f7db8a28ca8774aa3ba10537d4966401",
+    "cacheID": "ba79f2e4649aa03bf9678b1a002d82e4",
     "id": null,
     "metadata": {},
     "name": "EditUserMutation",
     "operationKind": "mutation",
-    "text": "mutation EditUserMutation(\n  $displayName: String!\n  $username: String!\n  $email: String!\n  $currentPassword: String\n  $newPassword: String\n  $newPasswordConfirmation: String\n) {\n  editUser(input: {displayName: $displayName, username: $username, email: $email, currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation}) {\n    errors\n  }\n}\n"
+    "text": "mutation EditUserMutation(\n  $id: String!\n  $displayName: String!\n  $username: String!\n  $email: String!\n  $currentPassword: String\n  $newPassword: String\n  $newPasswordConfirmation: String\n) {\n  editUser(input: {id: $id, displayName: $displayName, username: $username, email: $email, currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation}) {\n    errors\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b21defc20459e99810af7a1a0f8f5e94";
+(node as any).hash = "37d63a6775dac1ca24856eeaf9afb3e4";
 
 export default node;

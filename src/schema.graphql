@@ -24,6 +24,7 @@ type SignInResponse {
 }
 
 input EditUserInput {
+  id: String!
   displayName: String!
   username: String!
   email: String!
