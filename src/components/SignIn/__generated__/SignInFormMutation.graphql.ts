@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dd4ddbe10c2af218e2ebf03583ec865b>>
+ * @generated SignedSource<<2fd5065ffad7caa1a6fc01b7bea29a64>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type SignInFormMutation$variables = {
 };
 export type SignInFormMutation$data = {
   readonly signin: {
+    readonly bearerToken: string | null | undefined;
     readonly errors: ReadonlyArray<string>;
   };
 };
@@ -41,14 +42,20 @@ v2 = [
       {
         "fields": [
           {
-            "kind": "Variable",
-            "name": "password",
-            "variableName": "password"
-          },
-          {
-            "kind": "Variable",
-            "name": "usernameOrEmail",
-            "variableName": "usernameOrEmail"
+            "fields": [
+              {
+                "kind": "Variable",
+                "name": "password",
+                "variableName": "password"
+              },
+              {
+                "kind": "Variable",
+                "name": "usernameOrEmail",
+                "variableName": "usernameOrEmail"
+              }
+            ],
+            "kind": "ObjectValue",
+            "name": "user"
           }
         ],
         "kind": "ObjectValue",
@@ -65,6 +72,13 @@ v2 = [
         "args": null,
         "kind": "ScalarField",
         "name": "errors",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "bearerToken",
         "storageKey": null
       }
     ],
@@ -95,16 +109,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "efee564c9cf7d1003ff9993d3570a58a",
+    "cacheID": "774b7f1dfed8cc199c7df1d9d4d8c4f1",
     "id": null,
     "metadata": {},
     "name": "SignInFormMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormMutation(\n  $usernameOrEmail: String!\n  $password: String!\n) {\n  signin(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {\n    errors\n  }\n}\n"
+    "text": "mutation SignInFormMutation(\n  $usernameOrEmail: String!\n  $password: String!\n) {\n  signin(input: {user: {usernameOrEmail: $usernameOrEmail, password: $password}}) {\n    errors\n    bearerToken\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4a9a618578290146e665cb06323b8bc1";
+(node as any).hash = "79dfb90a09e1ed4c28b1acbba9fde0f2";
 
 export default node;

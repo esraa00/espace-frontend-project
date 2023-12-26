@@ -8,23 +8,52 @@ import {
 
 const HTTP_ENDPOINT = "http://localhost:3000/graphql";
 
-const fetchFn: FetchFunction = async (request, variables) => {
-  const resp = await fetch(HTTP_ENDPOINT, {
+const fetchFn: FetchFunction = async (
+  request,
+  variables,
+  cacheConfig,
+  uploadables
+) => {
+  const requestToBeSent = {
     method: "POST",
-    credentials: "include",
     headers: {
-      Accept:
-        "application/graphql-response+json; charset=utf-8, application/json; charset=utf-8",
-      "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNzAyNDkzMjc5LCJleHAiOjE3MDI0OTY4NzksImp0aSI6IjMwNzM5ODA4LTg4MTgtNGFlMS1iY2RhLTNmOTRhYzJjNjEwNiJ9.f2Bh9ZtFxq3GEeZVunYcR7OHwxZhzd8IA-Zitr-IOwU",
+      Authorization: localStorage.getItem("Authorization"),
     },
-    body: JSON.stringify({
-      query: request.text, // <-- The GraphQL document composed by Relay
+  };
+  if (uploadables) {
+    if (!window.FormData) {
+      throw new Error("Uploading files without `FormData` not supported.");
+    }
+    const formData = new FormData();
+    formData.append("query", request.text);
+    formData.append("variables", JSON.stringify(variables));
+
+    Object.keys(uploadables).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(uploadables, key)) {
+        formData.append(key, uploadables[key]);
+      }
+    });
+    requestToBeSent.body = formData;
+  } else {
+    requestToBeSent.headers["Content-Type"] = "application/json";
+    requestToBeSent.body = JSON.stringify({
+      query: request.text,
       variables,
-    }),
-  });
-  return await resp.json();
+    });
+  }
+  return await fetch(HTTP_ENDPOINT, requestToBeSent)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+
+      // HTTP errors
+      // TODO: NOT sure what to do here yet
+      return response.json();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 function createRelayEnvironment() {

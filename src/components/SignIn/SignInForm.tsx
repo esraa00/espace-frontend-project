@@ -2,7 +2,9 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import Label from "../Label/Label";
 import { graphql } from "relay-runtime";
 import { useMutation } from "react-relay";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Error from "../Error/Error";
 
 type FormErrors = {
   usernameOrEmail?: string;
@@ -11,8 +13,13 @@ type FormErrors = {
 
 const SignInFormMutation = graphql`
   mutation SignInFormMutation($usernameOrEmail: String!, $password: String!) {
-    signin(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+    signin(
+      input: {
+        user: { usernameOrEmail: $usernameOrEmail, password: $password }
+      }
+    ) {
       errors
+      bearerToken
     }
   }
 `;
@@ -24,6 +31,8 @@ export default function SignInForm() {
     usernameOrEmail: "",
     password: "",
   };
+
+  const [errors, setErrors] = useState([]);
   const [commitMutation, isMutationInFlight] = useMutation(SignInFormMutation);
   return (
     <div className="page-wrapper">
@@ -42,22 +51,20 @@ export default function SignInForm() {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
+          setErrors([]);
           commitMutation({
             variables: {
               usernameOrEmail: values.usernameOrEmail,
               password: values.password,
             },
-            onCompleted(response, errors) {
-              console.log("response ", response);
-              console.log("response.headers ", response.headers);
-              if (response.signin.errors.length == 0) {
-                console.log("errors", errors);
-                // localStorage.setItem(
-                //   "Authorization",
-                //   response.headers["Authorization"]
-                // );
-                // <Navigate to="/dashboard" replace={true} />;
-                return navigate("http://localhost:5173/");
+            onCompleted(response) {
+              if (response.signin.errors.length != 0) {
+                setErrors(response.signin.errors);
+              } else {
+                localStorage.setItem(
+                  "Authorization",
+                  response.signin.bearerToken
+                );
               }
             },
           }),
@@ -85,10 +92,14 @@ export default function SignInForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-5 px-3 py-1.5 bg-green-400 z-40"
+              className="mt-5 mb-5 px-3 py-1.5 bg-green-400 z-40"
             >
               Submit
             </button>
+            {errors.length != 0 &&
+              errors.map((error) => {
+                return <Error errorMessage={error} key={error} />;
+              })}
           </Form>
         )}
       </Formik>

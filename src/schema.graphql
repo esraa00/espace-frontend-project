@@ -1,8 +1,28 @@
 type Query {
-  field: String
+  categories: [CategoriesQueryResponse!]!
+  tags: [TagsQueryResponse!]!
+  # currentUser:
 }
 
+type CategoriesQueryResponse {
+  id: ID!
+  name: String!
+}
+
+type TagsQueryResponse {
+  id: ID!
+  name: String!
+}
+
+# type CurrentUserQueryResponse {
+
+# }
+
 input SignupInput {
+  user: SignupInputUser!
+}
+
+input SignupInputUser {
   displayName: String!
   username: String!
   email: String!
@@ -15,15 +35,20 @@ type SignupResponse {
 }
 
 input SignInInput {
+  user: SignInInputUser!
+}
+
+input SignInInputUser {
   usernameOrEmail: String!
   password: String!
 }
 
 type SignInResponse {
   errors: [String!]!
+  bearerToken: String
 }
 
-input EditUserInput {
+input EditUserType {
   id: String!
   displayName: String!
   username: String!
@@ -33,12 +58,61 @@ input EditUserInput {
   newPasswordConfirmation: String
 }
 
+input EditUserInput {
+  user: EditUserType
+}
+
 type EditUserResponse {
+  post: Post
   errors: [String!]!
+}
+
+input CreatePostInput {
+  post: NewPost
+}
+
+input NewPost {
+  title: String!
+  body: String!
+  category_id: ID
+  tags_ids: [ID]
+  user_id: ID!
+}
+
+type CreatePostResponse {
+  post: Post
+  errors: [String!]
+}
+
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  category: Category
+  tags: [Tag]
+  user: User
+}
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+type Tag {
+  id: ID!
+  name: String!
+}
+
+type User {
+  id: ID!
+  displayName: String!
+  username: String!
+  email: String!
 }
 
 type Mutation {
   signup(input: SignupInput!): SignupResponse!
   signin(input: SignInInput!): SignInResponse!
   editUser(input: EditUserInput!): EditUserResponse!
+  createPost(input: CreatePostInput!): CreatePostResponse!
 }
